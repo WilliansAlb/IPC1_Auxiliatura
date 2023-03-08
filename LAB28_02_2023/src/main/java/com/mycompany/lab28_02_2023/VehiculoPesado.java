@@ -9,11 +9,13 @@ package com.mycompany.lab28_02_2023;
  *
  * @author willi
  */
-public class VehiculoPesado extends Vehiculo{
+public class VehiculoPesado extends Vehiculo {
+
     private int peso;
-    
-    public VehiculoPesado(int velocidad, double efectividad, int peso){
-        super(velocidad,efectividad);
+
+    public VehiculoPesado(int velocidad, double efectividad, int peso) {
+        super(velocidad, efectividad, true);
+        this.peso = peso;
     }
 
     public int getPeso() {
@@ -23,18 +25,21 @@ public class VehiculoPesado extends Vehiculo{
     public void setPeso(int peso) {
         this.peso = peso;
     }
-    
+
     @Override
-    public String paraImprimir(){
+    public String paraImprimir() {
         return "Vehiculo Pesado";
     }
-    
+
     @Override
-    public void avanzar(int tiempo){
-        if (peso >= 50 && super.getPosicion() > 400){
-            System.out.println("El Vehiculo Pesado ya no puede avanzar más");
-        } else {
-            super.calcularNuevaPosicion(tiempo);
+    public void avanzar(int tiempo) {
+        if (super.estaEnCarrera()) {
+            if (peso >= 50 && super.getPosicion() > 400) {
+                System.out.println("El Vehiculo Pesado ya no puede avanzar más");
+                super.setEstaEnCarrera(false);
+            } else {
+                super.calcularNuevaPosicion(tiempo);
+            }
         }
     }
 }

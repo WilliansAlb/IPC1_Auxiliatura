@@ -9,15 +9,15 @@ package com.mycompany.lab28_02_2023;
  *
  * @author willi
  */
-public class VehiculoDeportivo extends Vehiculo{
+public class VehiculoDeportivo extends Vehiculo {
 
     private int alertaKilometros;
-    
-    public VehiculoDeportivo(int velocidad, double efectividad, int alertaKilometros){
-        super(velocidad,efectividad);
+
+    public VehiculoDeportivo(int velocidad, double efectividad, int alertaKilometros) {
+        super(velocidad, efectividad, true);
         this.alertaKilometros = alertaKilometros;
     }
-    
+
     @Override
     public String paraImprimir() {
         return "Vehiculo Deportivo";
@@ -25,10 +25,13 @@ public class VehiculoDeportivo extends Vehiculo{
 
     @Override
     public void avanzar(int tiempo) {
-        if (alertaKilometros == super.getPosicion()){
-            System.out.println("Al Vehiculo Deportivo se le fundio el motor");
-        } else if (alertaKilometros < super.getPosicion()) {
-            super.calcularNuevaPosicion(tiempo);
+        if (super.estaEnCarrera()) {
+            if (alertaKilometros <= super.getPosicion()) {
+                System.out.println("Al Vehiculo Deportivo se le fundio el motor");
+                super.setEstaEnCarrera(false);
+            } else if (alertaKilometros > super.getPosicion()) {
+                super.calcularNuevaPosicion(tiempo);
+            }
         }
     }
 
@@ -39,5 +42,5 @@ public class VehiculoDeportivo extends Vehiculo{
     public void setAlertaKilometros(int alertaKilometros) {
         this.alertaKilometros = alertaKilometros;
     }
-    
+
 }
