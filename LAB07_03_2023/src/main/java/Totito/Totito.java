@@ -23,6 +23,10 @@ public class Totito {
         }
         imprimirTablero(tab);
         while (true) {
+            if (!comprobarPosicionesDisponibles(tab)){
+                System.out.println("Ya no hay posiciones disponibles, queda en empate.");
+                break;
+            }
             System.out.println("¿Donde quieres colocar la " + turno + "?");
             Scanner escaner = new Scanner(System.in);
             int eleccion = escaner.nextInt();
@@ -40,6 +44,17 @@ public class Totito {
                 System.out.println("Elige una posición vacía");
             }
         }
+    }
+    
+    public static boolean comprobarPosicionesDisponibles(Casilla[][] tab){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tab[i][j].getCasila().equalsIgnoreCase("-")){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean comprobarLineas(Casilla[][] tab, String turno) {

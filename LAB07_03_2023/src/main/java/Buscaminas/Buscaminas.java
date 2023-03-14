@@ -13,6 +13,7 @@ import java.util.Scanner;
  * @author willi
  */
 public class Buscaminas {
+
     /**
      * @param args the command line arguments
      */
@@ -21,12 +22,12 @@ public class Buscaminas {
         String ANSI_BLUE = "\u001B[34m";
         String ANSI_RESET = "\u001B[0m";
         String[][] tab = new String[5][5];
+        String[][] enc = new String[5][5];
         for (int i = 0; i < tab.length; i++) {
             for (int j = 0; j < tab[i].length; j++) {
                 tab[i][j] = ANSI_BLUE + "~" + ANSI_RESET;
-                System.out.print(tab[i][j] + " ");
+                enc[i][j] = ANSI_BLUE + "~" + ANSI_RESET;
             }
-            System.out.println("");
         }
         System.out.println("--------");
         for (int i = 0; i < 10; i++) {
@@ -36,14 +37,26 @@ public class Buscaminas {
             int posicionX = posicion % 5;
             tab[posicionY][posicionX] = "\u001B[31m" + "O" + ANSI_RESET;
         }
-        imprimir(tab);
         for (int i = 0; i < 10; i++) {
+            System.out.println("");
+            imprimir(enc);
             System.out.println("¿Qué casilla quieres verificar?");
             int posicionElegida = sc.nextInt();
             int posicionY = posicionElegida / 5;
             int posicionX = posicionElegida % 5;
             if (tab[posicionY][posicionX].equalsIgnoreCase("\u001B[31m" + "O" + ANSI_RESET)) {
+                enc[posicionY][posicionX] = "\u001B[31m" + "O" + ANSI_RESET;
+                System.out.println("Estás a " + (9 - i) + " intentos de que las bombas estallen");
                 System.out.println("Encontraste una bomba");
+            } else {
+                if (i == 9) {
+                    System.out.println("");
+                    imprimir(tab);
+                    System.out.println("Perdiste");
+                } else {
+                    System.out.println("Estás a " + (9 - i) + " intentos de que las bombas estallen");
+                    System.out.println("No encontraste nada");
+                }
             }
         }
     }
