@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Archivos;
+package Archivos.JuegoCulebrita;
 
+import Archivos.ArchivoSerializable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 public class Culebra {
 
     public static void main(String[] args) {
-        Tablero nuevo = new Tablero(8, 8, 3, 10);
+        Tablero nuevo = new Tablero(6, 6, 3, 10);
         nuevo.iniciarTableroVacio();
         nuevo.agregarObstaculos();
         nuevo.agregarPremios();

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Archivos;
+package Archivos.JuegoCulebrita;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -82,6 +82,7 @@ public class Tablero implements Serializable {
             casillas[posicionY][posicionX].setTieneJugador(true);
             player.setPosicionX(posicionX);
             player.setPosicionY(posicionY);
+            
         } else {
             casillas[posicionY][posicionX].setTipo(caracter);
         }
@@ -119,10 +120,23 @@ public class Tablero implements Serializable {
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
                 System.out.print(" ");
+                System.out.print(casillas[i][j].getPrimeraUltimaFila());
+                System.out.print(" ");
+            }
+            System.out.println("");
+            for (int j = 0; j < casillas[i].length; j++) {
+                System.out.print(" ");
                 System.out.print(casillas[i][j].getCaracter());
                 System.out.print(" ");
             }
-            System.out.println(" ");
+            System.out.println("");
+            for (int j = 0; j < casillas[i].length; j++) {
+                System.out.print(" ");
+                System.out.print(casillas[i][j].getPrimeraUltimaFila());
+                System.out.print(" ");
+            }
+            System.out.println("");
+            System.out.println("");
         }
     }
 

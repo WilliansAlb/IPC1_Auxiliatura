@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Archivos;
+package Archivos.JuegoCulebrita;
 
 import java.io.Serializable;
 
@@ -11,15 +11,15 @@ import java.io.Serializable;
  *
  * @author willi
  */
-public class Obstaculo extends Elemento implements Serializable {
+public class Manzana extends Elemento implements Serializable{
 
-    public Obstaculo() {
-        super("%");
+    public Manzana(String caracter) {
+        super(caracter);
     }
-
+    
     @Override
     public void pasar(Jugador j) {
-        j.setManzanasComidas(j.getManzanasComidas()-1);
+        j.setManzanasComidas(j.getManzanasComidas()+1);
     }
     
 }

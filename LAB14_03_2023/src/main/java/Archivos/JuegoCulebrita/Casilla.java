@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Archivos;
+package Archivos.JuegoCulebrita;
 
 import java.io.Serializable;
 
@@ -12,20 +12,37 @@ import java.io.Serializable;
  * @author willi
  */
 public class Casilla implements Serializable {
+
     private Elemento tipo;
     private boolean tieneJugador;
 
     public Elemento getTipo() {
         return tipo;
     }
-    
-    public String getCaracter(){
-        if (tipo!=null){
-            return tipo.getCaracter();
-        } else if (tieneJugador){
-            return "C";
+
+    public String getCaracter() {
+        if (tipo != null) {
+            if (tipo instanceof Obstaculo) {
+                return tipo.getCaracter() + tipo.getCaracter() + tipo.getCaracter();
+            } else {
+                return "-" + tipo.getCaracter() + "-";
+            }
+        } else if (tieneJugador) {
+            return "-C-";
         } else {
-            return "-";
+            return "---";
+        }
+    }
+
+    public String getPrimeraUltimaFila() {
+        if (tipo != null) {
+            if (tipo instanceof Obstaculo) {
+                return tipo.getCaracter() + tipo.getCaracter() + tipo.getCaracter();
+            } else {
+                return "---";
+            }
+        } else {
+            return "---";
         }
     }
 
