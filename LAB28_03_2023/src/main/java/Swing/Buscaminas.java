@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Buscaminas;
+package Swing;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,17 +34,40 @@ import javax.swing.JOptionPane;
  *
  * @author yelbetto
  */
-public class BuscaminasJuego extends javax.swing.JFrame {
+public class Buscaminas extends javax.swing.JFrame {
 
     Casilla[][] botones;
+    boolean mostrar;
+    int noBombas = 0;
+    int encontradas = 0;
 
     /**
      * Creates new form BuscaminasFrame
      */
-    public BuscaminasJuego() {
+    public Buscaminas() {
+        mostrar = false;
         initComponents();
         btnMarcar.setText("Marcar Mina \u2691");
         btnRevelar.setText("Revelar \u25C9");
+    }
+
+    public void perdiste(int id) {
+        for (int i = 0; i < botones.length; i++) {
+            for (int j = 0; j < botones[i].length; j++) {
+                if (botones[i][j].bomb) {
+                    try {
+                        if (botones[i][j].getId() == id) {
+                            botones[i][j].cambiarIcono(Casilla.EXPLOTE, false);
+                        } else {
+                            botones[i][j].cambiarIcono(Casilla.BOMB, false);
+                        }
+                        botones[i][j].revelada = true;
+                    } catch (IOException ex) {
+                        Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
     }
 
     public void añadirBotones() {
@@ -53,17 +76,28 @@ public class BuscaminasJuego extends javax.swing.JFrame {
         gl.setRows(botones.length);
         for (int i = 0; i < botones.length; i++) {
             for (int j = 0; j < botones[i].length; j++) {
+                botones[i][j].dimensionx = (-5+(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3;
+                botones[i][j].dimensiony = (-5+(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3;
+                botones[i][j].setId((i * botones.length + j));
                 botones[i][j].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
                             Casilla boton = (Casilla) e.getSource();
-                            if (boton.bomba) {
-                                boton.cambiarIcono();
+                            if (mostrar) {
+                                if (boton.bomb(botones)) {
+                                    perdiste(boton.id);
+                                }
+                            } else {
+                                if (boton.flag()) {
+                                    encontradas++;
+                                } else {
+                                    encontradas--;
+                                }
+                                numeroBombas.setText("Bombas descubiertas: "+encontradas+"/" + noBombas+" 💣");
                             }
-                            boton.setEnabled(false);
                         } catch (IOException ex) {
-                            Logger.getLogger(BuscaminasJuego.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Buscaminas.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 });
@@ -94,6 +128,9 @@ public class BuscaminasJuego extends javax.swing.JFrame {
         btnRevelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("BUSCAMINAS");
+        setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+        setSize(new java.awt.Dimension(0, 0));
 
         pnlJuego.setLayout(new java.awt.GridBagLayout());
 
@@ -106,12 +143,12 @@ public class BuscaminasJuego extends javax.swing.JFrame {
 
         numeroBombas.setFont(new java.awt.Font("DejaVu Sans Light", 0, 10)); // NOI18N
         numeroBombas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        numeroBombas.setText("numero de bombas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         pnlJuego.add(numeroBombas, gridBagConstraints);
 
+        pnlTablero.setPreferredSize(new Dimension(((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight())) * 2 / 3,((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight())) * 2 / 3));
         pnlTablero.setLayout(new java.awt.GridLayout(1, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -128,16 +165,21 @@ public class BuscaminasJuego extends javax.swing.JFrame {
         });
         pnlOpciones.add(btnLeerAleatorio);
 
-        btnMarcar.setBackground(new java.awt.Color(51, 51, 0));
+        btnMarcar.setBackground(java.awt.Color.orange);
         btnMarcar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        btnMarcar.setForeground(new java.awt.Color(102, 204, 255));
+        btnMarcar.setForeground(new java.awt.Color(51, 51, 51));
         btnMarcar.setText("Marcar mina");
-        btnMarcar.setEnabled(false);
+        btnMarcar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarcarActionPerformed(evt);
+            }
+        });
         pnlOpciones.add(btnMarcar);
 
+        btnRevelar.setBackground(new java.awt.Color(204, 0, 0));
         btnRevelar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnRevelar.setForeground(new java.awt.Color(255, 255, 255));
         btnRevelar.setText("Revelar");
-        btnRevelar.setEnabled(false);
         btnRevelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRevelarActionPerformed(evt);
@@ -179,6 +221,7 @@ public class BuscaminasJuego extends javax.swing.JFrame {
                         String[] dim1 = cadena.split(" ");
                         String[] dimensiones = dim1[1].split("x");
                         nuevo = new Tablero(Integer.parseInt(dimensiones[0]), Integer.parseInt(dimensiones[1]));
+                        nuevo.crearTableroVacio();
                         conteo = 0;
                     } else if (cadena.contains("bombasAleatorias") && nuevo != null) {
                         nuevo.setBombasAleatorias(true);
@@ -195,17 +238,24 @@ public class BuscaminasJuego extends javax.swing.JFrame {
             System.out.println("Archivo inexistente");
         }
         botones = nuevo.getCasillas();
+        noBombas = nuevo.getNumeroBombas();
+        numeroBombas.setText("Bombas descubiertas: 0/" + noBombas+"  💣");
         añadirBotones();
-        btnMarcar.setEnabled(true);
-        btnMarcar.setContentAreaFilled(true);
-        btnMarcar.setBackground(Color.green);
+        btnMarcar.setEnabled(false);
         btnRevelar.setEnabled(true);
-        btnMarcar.setBackground(Color.gray);
     }//GEN-LAST:event_btnLeerAleatorioActionPerformed
 
     private void btnRevelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevelarActionPerformed
-        // TODO add your handling code here:
+        mostrar = true;
+        btnMarcar.setEnabled(true);
+        btnRevelar.setEnabled(false);
     }//GEN-LAST:event_btnRevelarActionPerformed
+
+    private void btnMarcarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarActionPerformed
+        mostrar = false;
+        btnMarcar.setEnabled(false);
+        btnRevelar.setEnabled(true);
+    }//GEN-LAST:event_btnMarcarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -224,21 +274,23 @@ public class BuscaminasJuego extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BuscaminasJuego().setVisible(true);
+                new Buscaminas().setVisible(true);
             }
         });
     }

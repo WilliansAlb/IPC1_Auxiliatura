@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Buscaminas;
+package Swing;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
@@ -45,8 +46,10 @@ public class Tablero {
             for (int i = 0; i < lineas.length; i++) {
                 String[] caracteres = lineas[i].split(",");
                 for (int j = 0; j < caracteres.length; j++) {
-                    casillas[i][j] = new Casilla();
-                    casillas[i][j].bomba = caracteres[j].equalsIgnoreCase("O");
+                    casillas[i][j] = new Casilla(((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3);
+                    casillas[i][j].bomb = caracteres[j].equalsIgnoreCase("O");
+                    casillas[i][j].dimensionx = ((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3;
+                    casillas[i][j].dimensiony = ((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3;
                 }
             }
         } catch (IndexOutOfBoundsException ie) {
@@ -56,14 +59,24 @@ public class Tablero {
         return true;
     }
 
+    public void crearTableroVacio() throws IOException {
+        for (int i = 0; i < y; i++) {
+            for (int j = 0; j < x; j++) {
+                casillas[i][j] = new Casilla(((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3);
+                casillas[i][j].setId(i*y+j);
+                casillas[i][j].bomb = false;
+                casillas[i][j].flag = false;
+            }
+        }
+    }
+
     public boolean agregarLinea(String linea, int posicion) throws IOException {
         String[] lineas = linea.split(",");
         if (lineas.length <= x) {
             if (posicion <= y) {
                 for (int i = 0; i < lineas.length; i++) {
-                    casillas[posicion][i] = new Casilla();
                     if (lineas[i].equalsIgnoreCase("O")) {
-                        casillas[posicion][i].bomba = lineas[i].equalsIgnoreCase("O");
+                        casillas[posicion][i].setBomb(casillas, true);
                         numeroBombas++;
                     }
                 }

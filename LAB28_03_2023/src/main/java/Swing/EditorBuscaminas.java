@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Buscaminas;
+package Swing;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -32,36 +32,43 @@ import javax.swing.JOptionPane;
  *
  * @author yelbetto
  */
-public class BuscaminasFrame extends javax.swing.JFrame {
+public class EditorBuscaminas extends javax.swing.JFrame {
 
     Casilla[][] botones;
+    int dimensionx = 5;
+    int dimensiony = 5;
 
     /**
      * Creates new form BuscaminasFrame
      */
-    public BuscaminasFrame() {
+    public EditorBuscaminas() {
         initComponents();
         añadirBotones();
     }
 
     public void añadirBotones() {
-        botones = new Casilla[8][8];
+        botones = new Casilla[dimensiony][dimensionx];
         GridLayout gl = (GridLayout) pnlTablero.getLayout();
         gl.setColumns(botones[0].length);
         gl.setRows(botones.length);
         for (int i = 0; i < botones.length; i++) {
             for (int j = 0; j < botones[i].length; j++) {
                 try {
-                    botones[i][j] = new Casilla();
+                    botones[i][j] = new Casilla(-5 +((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3);
+                    botones[i][j].setId((i * botones.length + j));
                     botones[i][j].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
                                 Casilla boton = (Casilla) e.getSource();
-                                boton.bomba = !boton.bomba;
-                                boton.cambiarIcono();
+                                boton.bomb = !boton.bomb;
+                                if (boton.bomb) {
+                                    boton.cambiarIcono(Casilla.BOMB, false);
+                                } else {
+                                    boton.cambiarIcono(Casilla.WATER, false);
+                                }
                             } catch (IOException ex) {
-                                Logger.getLogger(BuscaminasFrame.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(EditorBuscaminas.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     });
@@ -69,7 +76,7 @@ public class BuscaminasFrame extends javax.swing.JFrame {
                     pnlTablero.revalidate();
                     pnlTablero.repaint();
                 } catch (IOException ex) {
-                    Logger.getLogger(BuscaminasFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(EditorBuscaminas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -92,7 +99,7 @@ public class BuscaminasFrame extends javax.swing.JFrame {
         btnCrearArchivo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+        setSize(new java.awt.Dimension(0, 0));
 
         pnlEditorTablero.setLayout(new java.awt.GridBagLayout());
 
@@ -111,7 +118,8 @@ public class BuscaminasFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         pnlEditorTablero.add(lblInfoEditor, gridBagConstraints);
 
-        pnlTablero.setLayout(new java.awt.GridLayout());
+        pnlTablero.setPreferredSize(new Dimension(((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight())) * 2 / 3,((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight())) * 2 / 3));
+        pnlTablero.setLayout(new java.awt.GridLayout(1, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -147,21 +155,19 @@ public class BuscaminasFrame extends javax.swing.JFrame {
         for (int i = 0; i < botones.length; i++) {
             lineas[i] = "";
             for (int j = 0; j < botones[i].length; j++) {
-                lineas[i] += (botones[i][j].bomba) ? "O" : "~";
+                lineas[i] += (botones[i][j].bomb) ? "O" : "~";
                 if (j != (botones[i].length - 1)) {
                     lineas[i] += ",";
                 }
             }
         }
         File f;
-        BufferedReader entrada = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter escritor = null;
-        String cadena;
         f = new File("mar.txt");
         try {
             escritor = new PrintWriter(new DataOutputStream(new FileOutputStream(f, false)));
             escritor.println("TABLEROS");
-            escritor.println("dimension " + 8 + "x" + 8);
+            escritor.println("dimension " + dimensionx + "x" + dimensiony);
             for (int i = 0; i < lineas.length; i++) {
                 String linea = lineas[i];
                 escritor.println(linea);
@@ -191,20 +197,21 @@ public class BuscaminasFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditorBuscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditorBuscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditorBuscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BuscaminasFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditorBuscaminas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BuscaminasFrame().setVisible(true);
+                new EditorBuscaminas().setVisible(true);
             }
         });
     }
