@@ -74,10 +74,10 @@ public class Buscaminas extends javax.swing.JFrame {
         GridLayout gl = (GridLayout) pnlTablero.getLayout();
         gl.setColumns(botones[0].length);
         gl.setRows(botones.length);
+        int casillaTamanio = (-5+(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3;
         for (int i = 0; i < botones.length; i++) {
             for (int j = 0; j < botones[i].length; j++) {
-                botones[i][j].dimensionx = (-5+(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3;
-                botones[i][j].dimensiony = (-5+(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3;
+                botones[i][j].tamanio = casillaTamanio;
                 botones[i][j].setId((i * botones.length + j));
                 botones[i][j].addActionListener(new ActionListener() {
                     @Override

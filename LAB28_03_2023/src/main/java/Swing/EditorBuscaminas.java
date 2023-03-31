@@ -35,8 +35,8 @@ import javax.swing.JOptionPane;
 public class EditorBuscaminas extends javax.swing.JFrame {
 
     Casilla[][] botones;
-    int dimensionx = 5;
-    int dimensiony = 5;
+    int dimensionx = 12;
+    int dimensiony = 12;
 
     /**
      * Creates new form BuscaminasFrame
@@ -51,11 +51,11 @@ public class EditorBuscaminas extends javax.swing.JFrame {
         GridLayout gl = (GridLayout) pnlTablero.getLayout();
         gl.setColumns(botones[0].length);
         gl.setRows(botones.length);
+        int casillaTamanio = -5 +((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3;
         for (int i = 0; i < botones.length; i++) {
             for (int j = 0; j < botones[i].length; j++) {
                 try {
-                    botones[i][j] = new Casilla(-5 +((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / botones.length)) * 2 / 3);
-                    botones[i][j].setId((i * botones.length + j));
+                    botones[i][j] = new Casilla(casillaTamanio,(i * botones.length + j),i,j);
                     botones[i][j].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {

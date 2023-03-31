@@ -46,10 +46,11 @@ public class Tablero {
             for (int i = 0; i < lineas.length; i++) {
                 String[] caracteres = lineas[i].split(",");
                 for (int j = 0; j < caracteres.length; j++) {
-                    casillas[i][j] = new Casilla(((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3);
+                    casillas[i][j] = new Casilla(((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / casillas.length)) * 2 / 3);
+                    casillas[i][j].setId(i * y + j);
+                    casillas[i][j].setCoordenadaX(j);
+                    casillas[i][j].setCoordenadaY(i);
                     casillas[i][j].bomb = caracteres[j].equalsIgnoreCase("O");
-                    casillas[i][j].dimensionx = ((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3;
-                    casillas[i][j].dimensiony = ((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3;
                 }
             }
         } catch (IndexOutOfBoundsException ie) {
@@ -62,8 +63,10 @@ public class Tablero {
     public void crearTableroVacio() throws IOException {
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
-                casillas[i][j] = new Casilla(((int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/casillas.length))*2/3);
-                casillas[i][j].setId(i*y+j);
+                casillas[i][j] = new Casilla(((int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / casillas.length)) * 2 / 3);
+                casillas[i][j].setId(i * y + j);
+                casillas[i][j].setCoordenadaX(j);
+                casillas[i][j].setCoordenadaY(i);
                 casillas[i][j].bomb = false;
                 casillas[i][j].flag = false;
             }
