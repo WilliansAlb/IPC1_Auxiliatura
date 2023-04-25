@@ -1,0 +1,20 @@
+ESTUDIANTE-----------------------------
+NOMBRE: Fernando Garcia Ixpec
+CARNE: 215602050
+SECCION: A
+CURSOS: (matematicas,biologia,literatura,sociales)
+ESTUDIANTE-----------------------------
+NOMBRE: Pablo Lopez
+CARNE: 215161532
+SECCION: A
+CURSOS: (matematicas,literatura,sociales)
+ESTUDIANTE-----------------------------
+NOMBRE: Eunice Aguilar Herrera
+CARNE: 215102545
+SECCION: B
+CURSOS: (matematicas,sociales)
+ESTUDIANTE-----------------------------
+NOMBRE: Alejandro Mauricio Hernandez Gomez
+CARNE: 515412025
+SECCION: A
+CURSOS: (matematicas,biologia,literatura,sociales)
