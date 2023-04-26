@@ -32,6 +32,7 @@ public class Concurso extends javax.swing.JFrame {
     private ImageIcon client;
     private DefaultTableModel modelo;
     private DefaultTableModel modelo2;
+    private volatile boolean ejecutandose = false;
 
     /**
      * Creates new form Concurso
@@ -40,6 +41,20 @@ public class Concurso extends javax.swing.JFrame {
         initComponents();
         setTitle("Supermercados SUMA");
         iniciarImagenes();
+    }
+
+    public boolean isEjecutandose() {
+        return ejecutandose;
+    }
+
+    public void setEjecutandose(boolean ejecutandose) {
+        this.ejecutandose = ejecutandose;
+    }
+    
+    
+    
+    public JLabel getTemporizador(){
+        return LabelTemporizador;
     }
 
     public void iniciarImagenes() {
@@ -315,10 +330,17 @@ public class Concurso extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonIniciarActionPerformed
-        PanelFila1.add(new JButton(client));
-        PanelFila1.revalidate();
-        PanelFila1.repaint();
-        modelo.addRow(new Object[]{"Producto1","Precio1","Peso1"});
+//        PanelFila1.add(new JButton(client));
+//        PanelFila1.revalidate();
+//        PanelFila1.repaint();
+//        modelo.addRow(new Object[]{"Producto1","Precio1","Peso1"});
+        ejecutandose = true;
+        Temporizador temporizador = new Temporizador(this);
+        temporizador.start();
+        Cajero c1 = new Cajero(this,"German",0.15,0.30,1,3);
+        c1.start();
+        Cajero c2 = new Cajero(this,"Luis",0.10,0.35,2,2);
+        c2.start();
     }//GEN-LAST:event_BotonIniciarActionPerformed
 
     /**
