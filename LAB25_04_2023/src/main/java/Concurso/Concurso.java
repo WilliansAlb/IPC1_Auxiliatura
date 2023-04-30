@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,11 +29,11 @@ import javax.swing.table.DefaultTableModel;
  * @author yelbetto
  */
 public class Concurso extends javax.swing.JFrame {
-
     private ImageIcon client;
     private DefaultTableModel modelo;
     private DefaultTableModel modelo2;
     private volatile boolean ejecutandose = false;
+    private Supermercado supermercado;
 
     /**
      * Creates new form Concurso
@@ -43,6 +44,24 @@ public class Concurso extends javax.swing.JFrame {
         iniciarImagenes();
     }
 
+    public JTable getTablaProductos1() {
+        return TablaProductos1;
+    }
+
+    public void setTablaProductos1(JTable TablaProductos1) {
+        this.TablaProductos1 = TablaProductos1;
+    }
+
+    public JTable getTablaProductos2() {
+        return TablaProductos2;
+    }
+
+    public void setTablaProductos2(JTable TablaProductos2) {
+        this.TablaProductos2 = TablaProductos2;
+    }
+    
+    
+
     public boolean isEjecutandose() {
         return ejecutandose;
     }
@@ -50,13 +69,107 @@ public class Concurso extends javax.swing.JFrame {
     public void setEjecutandose(boolean ejecutandose) {
         this.ejecutandose = ejecutandose;
     }
-    
-    
+
+    public ImageIcon getClient() {
+        return client;
+    }
+
+    public void setClient(ImageIcon client) {
+        this.client = client;
+    }
     
     public JLabel getTemporizador(){
         return LabelTemporizador;
     }
 
+    public JPanel getPanelFila1() {
+        return PanelFila1;
+    }
+
+    public void setPanelFila1(JPanel PanelFila1) {
+        this.PanelFila1 = PanelFila1;
+    }
+
+    public JPanel getPanelFila2() {
+        return PanelFila2;
+    }
+
+    public void setPanelFila2(JPanel PanelFila2) {
+        this.PanelFila2 = PanelFila2;
+    }
+
+    public DefaultTableModel getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(DefaultTableModel modelo) {
+        this.modelo = modelo;
+    }
+
+    public DefaultTableModel getModelo2() {
+        return modelo2;
+    }
+
+    public void setModelo2(DefaultTableModel modelo2) {
+        this.modelo2 = modelo2;
+    }
+
+    public JLabel getLabelAccion1() {
+        return LabelAccion1;
+    }
+
+    public void setLabelAccion1(JLabel LabelAccion1) {
+        this.LabelAccion1 = LabelAccion1;
+    }
+
+    public JLabel getLabelAccion2() {
+        return LabelAccion2;
+    }
+
+    public void setLabelAccion2(JLabel LabelAccion2) {
+        this.LabelAccion2 = LabelAccion2;
+    }
+
+    public JLabel getLabelAtendidos1() {
+        return LabelAtendidos1;
+    }
+
+    public void setLabelAtendidos1(JLabel LabelAtendidos1) {
+        this.LabelAtendidos1 = LabelAtendidos1;
+    }
+
+    public JLabel getLabelAtendidos2() {
+        return LabelAtendidos2;
+    }
+
+    public void setLabelAtendidos2(JLabel LabelAtendidos2) {
+        this.LabelAtendidos2 = LabelAtendidos2;
+    }
+
+    public JLabel getLabelProductos1() {
+        return LabelProductos1;
+    }
+
+    public void setLabelProductos1(JLabel LabelProductos1) {
+        this.LabelProductos1 = LabelProductos1;
+    }
+
+    public JLabel getLabelProductos2() {
+        return LabelProductos2;
+    }
+
+    public void setLabelProductos2(JLabel LabelProductos2) {
+        this.LabelProductos2 = LabelProductos2;
+    }
+
+    public Supermercado getSupermercado() {
+        return supermercado;
+    }
+
+    public void setSupermercado(Supermercado supermercado) {
+        this.supermercado = supermercado;
+    }
+    
     public void iniciarImagenes() {
         try {
             BufferedImage bufferedImage = ImageIO.read(this.getClass().getResource("/img/cajera.png"));
@@ -66,9 +179,6 @@ public class Concurso extends javax.swing.JFrame {
             client = new ImageIcon(imgClient);
             LabelCajera1.setIcon(new ImageIcon(image));
             LabelCajera2.setIcon(new ImageIcon(image));
-            JButton boton = new JButton();
-            boton.setIcon(client);
-            PanelFila1.add(boton);
             modelo = new DefaultTableModel();
             modelo.addColumn("Producto");
             modelo.addColumn("Precio");
@@ -335,12 +445,15 @@ public class Concurso extends javax.swing.JFrame {
 //        PanelFila1.repaint();
 //        modelo.addRow(new Object[]{"Producto1","Precio1","Peso1"});
         ejecutandose = true;
+        supermercado = new Supermercado(this);
+        supermercado.abastecerCatalogo();
         Temporizador temporizador = new Temporizador(this);
         temporizador.start();
-        Cajero c1 = new Cajero(this,"German",0.15,0.30,1,3);
-        c1.start();
-        Cajero c2 = new Cajero(this,"Luis",0.10,0.35,2,2);
-        c2.start();
+        supermercado.start();
+//        Cajero c1 = new Cajero(this,"German",0.15,0.30,1,3);
+//        c1.start();
+//        Cajero c2 = new Cajero(this,"Luis",0.10,0.35,2,2);
+//        c2.start();
     }//GEN-LAST:event_BotonIniciarActionPerformed
 
     /**

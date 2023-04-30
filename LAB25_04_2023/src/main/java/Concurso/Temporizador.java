@@ -35,5 +35,6 @@ public class Temporizador extends Thread {
             }
         }
         concurso.setEjecutandose(false);
+        concurso.getSupermercado().interrupt();
     }
 }
